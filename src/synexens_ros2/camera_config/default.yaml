@@ -1,0 +1,7 @@
+StreamType: 3
+ResolutionRGB: 3        # 960x540 (lowest CS30 supports)
+FrameRate: 10
+HorizontalMirror: false
+VerticalFlip: false
+Filter:
+  UseFilter: false
