@@ -1,8 +1,11 @@
 # cs30_RGB-D_ToF_Camera_ROS2_Humble
-This is a repository is for cs30 camera running with Ubuntu 22.04 with ROS2 Humble
+This is a repository is for cs30 camera running with Ubuntu 22.04 with ROS2 Humble (x86_64 system)
 
 ### Recommended OS: Ubuntu 22.04 (Strongly Advised)
 ### Recommended ROS: ROS2
+
+This is the SDK and Instruction : https://support.tofsensors.com/resource/sdk/sdk.html
+                        ROS2    : https://support.tofsensors.com/resource/sdk/ros2.html
 ```
 cs30_ws/
 └── workspace/
@@ -103,4 +106,50 @@ Hwat you should expect:
 /parameter_events
 /rosout
 /tf_static
+```
+
+In order to run this on Pi ARMv8( I use Pi4B 8 gb running ubuntu 22.04 desktop )
+1. Clone my repo
+2. Get SynexensSDK_4.2.4.0_armv8_202504281435/ from : https://support.tofsensors.com/resource/sdk/sdk.html
+```
+bin/
+demo/
+include/        ← header files (.h)
+lib/            ← .so libraries
+thirdpart/opencv440/  ← ARMv8 OpenCV
+```
+
+3.Go to this path 
+
+```bash
+cd ~/cs30_ws/workspace/src/synexens_ros2
+
+mkdir -p ext/sdk
+cp -r /path/to/SynexensSDK_4.2.4.0_armv8_202504281435/include ext/sdk/
+cp -r /path/to/SynexensSDK_4.2.4.0_armv8_202504281435/lib ext/sdk/
+cp -r /path/to/SynexensSDK_4.2.4.0_armv8_202504281435/thirdpart/opencv440 ext/sdk/opencv
+```
+
+The structure should be
+```
+ext/
+└── sdk/
+    ├── include/        # SY*.h files
+    ├── lib/            # libSynexensSDK.so, etc.
+    └── opencv/         # include/ and lib/ from thirdpart/opencv440/
+```
+
+4. Build the ROS2 Packages
+```
+cd ~/cs30_ws/workspace
+colcon build --packages-select synexens_ros2
+source install/setup.bash
+```
+5. Test
+```bash
+ros2 launch synexens_ros2 driver_launch.py
+```
+6. View
+```
+ros2 run synexens_ros2 opencv_rgb_viewer_only.py
 ```
